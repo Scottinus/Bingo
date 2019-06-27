@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+    <!--
+
+        BINGO CHALLENGE!!!
+
+        Create programmatically (with JS) a BINGO board with 76 cells, from 1 to 76.
+
+        Create a button to randomize a number from 1 to 76. The same number should be highlighted on the bingo board
+
+
+
+        EXTRA: 
+
+        - Take ALWAYS a new number (avoid randoming 10 3 times for example)
+
+        - Create a USER BOARD with random 24 numbers that highlights as the main board does
+
+        - Let the user choose HOW MANY user boards he's willing to play with and create them.
+
+    -->
+
+    <head>
+        <style>
+
+            h1{
+                text-align: center;
+            }
+
+
+            #mainBoard {
+                margin-left: 26%;
+                width: 50%;
+                height: 50%;
+                margin-bottom: 2em;
+                border: 1px solid white;
+                color: black;
+            }
+
+            #playerCard{
+                margin-top:5px;
+                margin-left: 25%;
+                width: 60%;
+                height: 50%;
+                margin-bottom: 2em;
+                color: black;
+
+            }
+            #playerCard .playerNumbers{
+                widows: 20px; /* 5 per line*/ 
+                width:  50px;
+                display: inline-block;
+                text-align: center;
+                min-height: 50px;
+                line-height: 15px;
+                border: 1px solid white;
+                color: #b6a561;
+            }
+
+            #mainBoard .mainNumbers{
+                widows: 20px; /* 5 per line*/ 
+                width:  50px;
+                display: inline-block;
+                text-align: center;
+                min-height: 50px;
+                line-height: 15px;
+                color: white;
+            }
+
+              #mainBoard :hover{
+
+                    background-color : #eee;
+              }
+
+              #playerCard :hover{
+                    background-color : #eee;
+              }
+
+            h1, h2, p{
+                color: #b6a561;
+            }
+
+body{
+     background-image: url("bg.png");
+     background-repeat:no-repeat;
+    background-color : black;
+   
+}
+
+#addButton{
+    background-color: transparent;
+    color: #b6a561;
+    font-size: 1em;
+}
+
+.purchaseContainer{
+    display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(10px, auto);
+}
+
+#addBox{
+    margin-top: 1em;
+   margin-right: 2em;
+}
+
+#logo{
+
+    margin-left:43%;
+    margin-bottom: 3em;
+}
+
+#startButton{
+   margin-left : 47%;
+   background-color: transparent;
+   color: #b6a561;
+   border: 2px solid #b6a561;
+   border-radius: 10px;
+   font-size : 25px;
+}
+
+       </style>
+</head>
+
+
+    <body>
+        <img id = "logo" src  = "bingologo.png" alt= "bingo logo" width = "200px">
+
+        <!--HERE I CREATE THE BOX FOR THE BOARD OF NUMBERS BETWEEN 1-76-->
+                    <div id = "mainBoard"></div>
+                    <div><input type="button" value= "START" id ="startButton" onclick ="startGame()"></div>
+                    <div><h2>Generate your card</h2></div>
+
+
+                    <!--HERE I CREATE THE GIRD THAT CONTAINS PLAYER CARDS AND BUTTON  TO GENERATE CARDA-->
+                <div class ="purchaseContainer">
+                             <div id="addBox">
+                             <input type="button" value="+" id="addButton" onclick ="addCard()"/> 
+                             <h2 id = "cards">X 0</h2>
+                         </div>
+                        <div id = "playerCard"></div>
+                         </div> 
+                 
+                     </div>
+    
+    
+    
+    
+
+        
+                
+        <script>
+
+            var genCards = false;
+            var mainBoardNumber = 76;
+            var mainerBoard = document.getElementById("mainBoard");
+            var arrayMain = []; 
+
+           //FUNCTION THAT CREATE THE MAIN BOARD WITH NUMBERS BETWEEN 1-76
+            window.onload = function(){
+                    for (var i = 0; i < mainBoardNumber; i++){
+
+                        var child = document.createElement("div");
+
+                        child.className = "mainNumbers";
+
+                         var displayMainNumber = document.createElement("h3");
+
+                         displayMainNumber.innerText = i+1;
+
+                         child.appendChild(displayMainNumber);
+                         //CLASS THAT I USE TO CHANGE COLOR IN startGame() FUNCTION
+                         displayMainNumber.classList.add("checkN");
+                         mainerBoard.appendChild(child);
+                    }
+                   
+            }
+
+            //FUNCTION USED TO DECIDE IF ADD MORE THAN ONE PLAYER CARD OR NOT
+            function addCard(){ 
+
+                        if(genCards == false){
+                            genCards = true;
+                          
+                            pCard();
+                        }       
+            }
+
+   //FUNCTION THAT CREATE THE PLAYER CARD
+            function pCard(){
+                console.log("ok");
+                var playCard = document.getElementById("playerCard");
+                    for (var i = 0; i < 25; i++){
+                        
+                        var child = document.createElement("div");
+
+                        child.className = "playerNumbers";
+
+                         var displayMainNumber = document.createElement("h3");
+
+                         displayMainNumber.innerText = Math.floor(Math.random()* 76); 
+      
+                         child.appendChild(displayMainNumber);
+                         //ADD ATTRIBUTE ONCLICK, USEFUL TO COLOR THE BACKGROUND WHEN CLICKING ON THE NUMBERS
+                         displayMainNumber.parentElement.setAttribute("onclick", "selectNumber(this)");
+                         playCard.appendChild(child);
+            }
+            }
+
+//FUNCTION THAT GENERATE THE RANDOM NUMBER AND COLOR THE BOX OF NUMBERS
+          function startGame(){
+              var randNumber = Math.floor(Math.random()* 76);
+
+              var highlightNumber = document.getElementsByClassName("checkN");
+               console.log("GENERATING");
+               console.log(randNumber);
+               //IF THE GAME IS STARTED(SO THE PLAYER HAS THE CARD) COLOR THE BOX OF MAINBOARD
+               if(genCards == true){
+                document.getElementById("startButton").value = "NEXT";
+                highlightNumber[randNumber];
+                console.log(highlightNumber[randNumber]);
+                                highlightNumber[randNumber].parentElement.style.backgroundColor = "#b6a561";
+                                highlightNumber[randNumber].style.color = "black";
+               }
+          }  
+
+         //FUNCTION CALLED WHEN CLICK ON THE PLAYER CARD'S NUMBERS
+          function selectNumber(changeColor){
+        changeColor.style.backgroundColor = "#b6a561";
+        changeColor.style.color = "black";
+
+          }
+
+        </script>
+
+    </body>
+
+</html>
